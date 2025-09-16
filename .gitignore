@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Local configuration
+local.properties
+
+# IDE (Android Studio / IntelliJ)
+*.iml
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# NDK / CMake
+.cxx/
+.externalNativeBuild/
+
+# MacOS
+.DS_Store
+
+# Captures (Android Studio)
+captures/
+
+# Misc
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.hprof
