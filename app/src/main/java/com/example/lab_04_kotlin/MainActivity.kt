@@ -325,6 +325,109 @@ fun FlowColumnExample() {
         }
     }
 }
+
+/* ------------------ CONTROLES ------------------ */
+
+@Composable
+fun AlertDialogExample() {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Column {
+        Button(onClick = { showDialog = true }) {
+            Text("Show AlertDialog")
+        }
+
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("Alert Dialog") },
+                text = { Text("This is an example of AlertDialog component") },
+                confirmButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("OK")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun CardExample() {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Card(
+            modifier = Modifier.size(80.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Text("Card 1")
+            }
+        }
+        Card(
+            modifier = Modifier.size(80.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Text("Card 2")
+            }
+        }
+    }
+}
+
+@Composable
+fun CheckboxExample() {
+    var checked by remember { mutableStateOf(false) }
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { checked = it }
+        )
+        Text("Checkbox ${if (checked) "Checked" else "Unchecked"}")
+    }
+}
+
+@Composable
+fun FloatingActionButtonExample() {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        FloatingActionButton(
+            onClick = { },
+            modifier = Modifier.size(56.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add")
+        }
+
+        ExtendedFloatingActionButton(
+            onClick = { },
+            icon = { Icon(Icons.Default.Edit, contentDescription = null) },
+            text = { Text("Extended FAB") }
+        )
+    }
+}
+
+@Composable
+fun IconExample() {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(Icons.Default.Favorite, contentDescription = "Favorite")
+        Icon(Icons.Default.Star, contentDescription = "Star", tint = Color.Yellow)
+        Icon(Icons.Default.Home, contentDescription = "Home", modifier = Modifier.size(32.dp))
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarExample() {
@@ -345,6 +448,7 @@ fun TopAppBarExample() {
         }
     )
 }
+
 /* ------------------ COMPONENTE PRINCIPAL SHOWCASE ------------------ */
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -352,7 +456,7 @@ fun TopAppBarExample() {
 fun ComponentShowcase() {
     Scaffold(
         topBar = {
-                TopAppBarExample()
+            TopAppBarExample()
         }
     ) { paddingValues ->
         LazyColumn(
@@ -446,4 +550,4 @@ fun PreviewComponentShowcase() {
     MaterialTheme {
         ComponentShowcase()
     }
-}
+}   
