@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,15 +13,22 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,19 +47,166 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/* ------------------ CONTENEDORES ------------------ */
+@Composable
+fun ComponentShowcase() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF667eea),
+                        Color(0xFF764ba2)
+                    )
+                )
+            )
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            contentPadding = PaddingValues(bottom = 32.dp)
+        ) {
+            item {
+                // Header principal
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(12.dp, RoundedCornerShape(24.dp)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(24.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "🎨",
+                            fontSize = 48.sp
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Component Showcase",
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color(0xFF2D3748),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = "Explore beautiful Material Design components",
+                            fontSize = 14.sp,
+                            color = Color(0xFF718096),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+
+            item { ComponentSection("📋 CONTENEDORES", Color(0xFF667eea)) { LazyColumnExample() } }
+            item { ComponentSection("➡️ LAZY ROW", Color(0xFF764ba2)) { LazyRowExample() } }
+            item { ComponentSection("⚡ GRID LAYOUT", Color(0xFF667eea)) { GridExample() } }
+            item { ComponentSection("📍 CONSTRAINT", Color(0xFF764ba2)) { ConstraintLayoutExample() } }
+            item { ComponentSection("🏗️ SCAFFOLD", Color(0xFF667eea)) { ScaffoldExample() } }
+            item { ComponentSection("🌊 SURFACE", Color(0xFF764ba2)) { SurfaceExample() } }
+            item { ComponentSection("🏷️ CHIPS", Color(0xFF667eea)) { ChipExample() } }
+            item { ComponentSection("🎭 BACKDROP", Color(0xFF764ba2)) { BackdropScaffoldExample() } }
+            item { ComponentSection("🌊 FLOW ROW", Color(0xFF667eea)) { FlowRowExample() } }
+            item { ComponentSection("📊 FLOW COLUMN", Color(0xFF764ba2)) { FlowColumnExample() } }
+        }
+    }
+}
+
+@Composable
+fun ComponentSection(title: String, accentColor: Color, content: @Composable () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(8.dp, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            // Header de sección
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .background(accentColor, CircleShape)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = title,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF2D3748)
+                )
+            }
+
+            // Contenido del componente
+            content()
+        }
+    }
+}
+
+/* ------------------ CONTENEDORES ESTILIZADOS ------------------ */
 
 @Composable
 fun LazyColumnExample() {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        contentPadding = PaddingValues(8.dp)
+            .height(200.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFF7FAFC)),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(12.dp)
     ) {
         items(count = 10) { index ->
-            Text("LazyColumn Item $index", modifier = Modifier.padding(4.dp))
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(2.dp, RoundedCornerShape(12.dp)),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (index % 2 == 0) Color(0xFF667eea) else Color(0xFF764ba2)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .background(Color.White.copy(alpha = 0.3f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "$index",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "LazyColumn Item $index",
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
         }
     }
 }
@@ -59,16 +215,39 @@ fun LazyColumnExample() {
 fun LazyRowExample() {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp)
     ) {
-        items(count = 5) { index ->
+        items(count = 6) { index ->
             Card(
-                modifier = Modifier.size(80.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                modifier = Modifier
+                    .size(100.dp)
+                    .shadow(6.dp, RoundedCornerShape(20.dp)),
+                colors = CardDefaults.cardColors(
+                    containerColor = when (index % 3) {
+                        0 -> Color(0xFF667eea)
+                        1 -> Color(0xFF764ba2)
+                        else -> Color(0xFF4FACFE)
+                    }
+                ),
+                shape = RoundedCornerShape(20.dp)
             ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    Text("$index")
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "💫",
+                        fontSize = 24.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Item $index",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp
+                    )
                 }
             }
         }
@@ -81,20 +260,40 @@ fun GridExample() {
         columns = GridCells.Fixed(3),
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .height(240.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFF7FAFC)),
+        contentPadding = PaddingValues(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(9) { index ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                    .aspectRatio(1f)
+                    .shadow(4.dp, RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFF667eea).copy(alpha = 0.8f + (index * 0.02f))
+                ),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    Text("Grid $index")
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "🎯",
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "$index",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
                 }
             }
         }
@@ -103,28 +302,57 @@ fun GridExample() {
 
 @Composable
 fun ConstraintLayoutExample() {
-    // Simulación de ConstraintLayout usando Box y posicionamiento
-    Box(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
+            .height(150.dp)
+            .shadow(4.dp, RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF667eea)
+        ),
+        shape = RoundedCornerShape(16.dp)
     ) {
-        Text(
-            "Top Start",
-            modifier = Modifier.align(Alignment.TopStart)
-        )
-        Text(
-            "Top End",
-            modifier = Modifier.align(Alignment.TopEnd)
-        )
-        Text(
-            "Center",
-            modifier = Modifier.align(Alignment.Center)
-        )
-        Text(
-            "Bottom Center",
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Card(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("🔝 Top Start", modifier = Modifier.padding(8.dp), fontSize = 12.sp)
+            }
+
+            Card(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("🔚 Top End", modifier = Modifier.padding(8.dp), fontSize = 12.sp)
+            }
+
+            Card(
+                modifier = Modifier.align(Alignment.Center),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Text("🎯 Center", modifier = Modifier.padding(12.dp), fontWeight = FontWeight.Bold)
+            }
+
+            Card(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("⬇️ Bottom", modifier = Modifier.padding(8.dp), fontSize = 12.sp)
+            }
+        }
     }
 }
 
@@ -134,36 +362,86 @@ fun ScaffoldExample() {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        modifier = Modifier.height(300.dp),
-        topBar = {
-            TopAppBar(title = { Text("Scaffold Example") })
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    scope.launch {
-                        snackbarHostState.showSnackbar("FAB clicked!")
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(320.dp)
+            .shadow(8.dp, RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "🏗️ Scaffold Demo",
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFF667eea),
+                        titleContentColor = Color.White
+                    )
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("¡FAB presionado! ✨")
+                        }
+                    },
+                    containerColor = Color(0xFF764ba2)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add", tint = Color.White)
+                }
+            },
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            bottomBar = {
+                BottomAppBar(
+                    containerColor = Color(0xFF4FACFE)
+                ) {
+                    Text(
+                        "📱 Bottom Bar",
+                        modifier = Modifier.padding(16.dp),
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFF7FAFC)
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "📋 Scaffold Content",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            "Padding aplicado automáticamente",
+                            fontSize = 12.sp,
+                            color = Color(0xFF718096),
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
             }
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        bottomBar = {
-            BottomAppBar {
-                Text("Bottom Bar", modifier = Modifier.padding(16.dp))
-            }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp)
-        ) {
-            Text("Scaffold Content Area")
-            Text("Padding applied automatically")
         }
     }
 }
@@ -173,16 +451,53 @@ fun SurfaceExample() {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        shadowElevation = 8.dp,
-        shape = RoundedCornerShape(16.dp)
+            .height(100.dp),
+        color = Color.Transparent,
+        shadowElevation = 0.dp,
+        shape = RoundedCornerShape(20.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.padding(16.dp)
+        Card(
+            modifier = Modifier
+                .fillMaxSize()
+                .shadow(12.dp, RoundedCornerShape(20.dp)),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF764ba2)
+            ),
+            shape = RoundedCornerShape(20.dp)
         ) {
-            Text("Surface with elevation and rounded corners")
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFF667eea),
+                                Color(0xFF764ba2)
+                            )
+                        )
+                    )
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "🌊",
+                        fontSize = 32.sp
+                    )
+                    Text(
+                        "Surface Estilizada",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        "Con gradiente y sombras",
+                        color = Color.White.copy(alpha = 0.8f),
+                        fontSize = 12.sp
+                    )
+                }
+            }
         }
     }
 }
@@ -191,52 +506,111 @@ fun SurfaceExample() {
 @Composable
 fun ChipExample() {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         AssistChip(
             onClick = { },
-            label = { Text("Assist") },
-            leadingIcon = { Icon(Icons.Default.Star, contentDescription = null, modifier = Modifier.size(18.dp)) }
+            label = {
+                Text(
+                    "✨ Assist",
+                    fontWeight = FontWeight.Medium
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    Icons.Default.Star,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+            },
+            colors = AssistChipDefaults.assistChipColors(
+                containerColor = Color(0xFF667eea).copy(alpha = 0.2f),
+                labelColor = Color(0xFF667eea),
+                leadingIconContentColor = Color(0xFF667eea)
+            ),
         )
+
         FilterChip(
             selected = false,
             onClick = { },
-            label = { Text("Filter") }
+            label = {
+                Text(
+                    "🔍 Filter",
+                    fontWeight = FontWeight.Medium
+                )
+            },
+            colors = FilterChipDefaults.filterChipColors(
+                containerColor = Color(0xFF764ba2).copy(alpha = 0.2f),
+                labelColor = Color(0xFF764ba2)
+            )
         )
+
         SuggestionChip(
             onClick = { },
-            label = { Text("Suggestion") }
+            label = {
+                Text(
+                    "💡 Tip",
+                    fontWeight = FontWeight.Medium
+                )
+            },
+            colors = SuggestionChipDefaults.suggestionChipColors(
+                containerColor = Color(0xFF4FACFE).copy(alpha = 0.2f),
+                labelColor = Color(0xFF4FACFE)
+            )
         )
     }
 }
 
 @Composable
 fun BackdropScaffoldExample() {
-    // Material3 no tiene BackdropScaffold, simulamos el concepto
     var expanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(240.dp)
+            .clip(RoundedCornerShape(16.dp))
     ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(if (expanded) 0.3f else 0.7f),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF667eea)
+            ),
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
         ) {
             Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Backdrop Header", color = MaterialTheme.colorScheme.onPrimary)
+                Text(
+                    text = "🎭",
+                    fontSize = 32.sp
+                )
+                Text(
+                    "Backdrop Header",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.height(12.dp))
                 Button(
                     onClick = { expanded = !expanded },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color(0xFF667eea)
+                    ),
+                    shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text("Toggle")
+                    Text(
+                        if (expanded) "Contraer" else "Expandir",
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
@@ -245,7 +619,10 @@ fun BackdropScaffoldExample() {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(if (expanded) 0.7f else 0.3f),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)
         ) {
             Box(
                 contentAlignment = Alignment.Center,
@@ -253,7 +630,21 @@ fun BackdropScaffoldExample() {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                Text("Backdrop Content Area")
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        "📱 Backdrop Content",
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF2D3748)
+                    )
+                    Text(
+                        "Área de contenido ${if (expanded) "expandida" else "contraída"}",
+                        fontSize = 12.sp,
+                        color = Color(0xFF718096),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
@@ -261,19 +652,26 @@ fun BackdropScaffoldExample() {
 
 @Composable
 fun FlowRowExample() {
-    // Simulamos FlowRow con Wrap usando Column y Rows
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text("FlowRow Simulation:", fontWeight = FontWeight.Bold)
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             repeat(3) { index ->
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFF667eea).copy(alpha = 0.8f + index * 0.1f)
+                    ),
+                    shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text("Item $index", modifier = Modifier.padding(8.dp))
+                    Text(
+                        "🌊 Item $index",
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.sp
+                    )
                 }
             }
         }
@@ -282,9 +680,18 @@ fun FlowRowExample() {
         ) {
             repeat(2) { index ->
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFF764ba2).copy(alpha = 0.8f + index * 0.1f)
+                    ),
+                    shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text("Item ${index + 3}", modifier = Modifier.padding(8.dp))
+                    Text(
+                        "✨ Item ${index + 3}",
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.sp
+                    )
                 }
             }
         }
@@ -297,772 +704,83 @@ fun FlowColumnExample() {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-            Text("Col 1:", fontWeight = FontWeight.Bold, fontSize = 12.sp)
-            repeat(3) { index ->
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
-                ) {
-                    Text("A$index", modifier = Modifier.padding(4.dp), fontSize = 12.sp)
-                }
-            }
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-            Text("Col 2:", fontWeight = FontWeight.Bold, fontSize = 12.sp)
-            repeat(2) { index ->
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                ) {
-                    Text("B$index", modifier = Modifier.padding(4.dp), fontSize = 12.sp)
-                }
-            }
-        }
-    }
-}
-
-/* ------------------ CONTROLES ------------------ */
-
-@Composable
-fun AlertDialogExample() {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Column {
-        Button(onClick = { showDialog = true }) {
-            Text("Show AlertDialog")
-        }
-
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Alert Dialog") },
-                text = { Text("This is an example of AlertDialog component") },
-                confirmButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text("OK")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text("Cancel")
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun CardExample() {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
         Card(
-            modifier = Modifier.size(80.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            modifier = Modifier.weight(1f),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFFF7FAFC)
+            ),
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text("Card 1")
-            }
-        }
-        Card(
-            modifier = Modifier.size(80.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text("Card 2")
-            }
-        }
-    }
-}
-
-@Composable
-fun CheckboxExample() {
-    var checked by remember { mutableStateOf(false) }
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = checked,
-            onCheckedChange = { checked = it }
-        )
-        Text("Checkbox ${if (checked) "Checked" else "Unchecked"}")
-    }
-}
-
-@Composable
-fun FloatingActionButtonExample() {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        FloatingActionButton(
-            onClick = { },
-            modifier = Modifier.size(56.dp)
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
-        }
-
-        ExtendedFloatingActionButton(
-            onClick = { },
-            icon = { Icon(Icons.Default.Edit, contentDescription = null) },
-            text = { Text("Extended FAB") }
-        )
-    }
-}
-
-@Composable
-fun IconExample() {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(Icons.Default.Favorite, contentDescription = "Favorite")
-        Icon(Icons.Default.Star, contentDescription = "Star", tint = Color.Yellow)
-        Icon(Icons.Default.Home, contentDescription = "Home", modifier = Modifier.size(32.dp))
-    }
-}
-
-@Composable
-fun ImageExample() {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        // Simulamos imágenes con íconos ya que no tenemos recursos
-        Card(
-            modifier = Modifier.size(64.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Icon(Icons.Default.Star, contentDescription = "Image placeholder", modifier = Modifier.size(32.dp))
-            }
-        }
-        Card(
-            modifier = Modifier.size(64.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Icon(Icons.Default.Star, contentDescription = "Photo placeholder", modifier = Modifier.size(32.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun ProgressBarExample() {
-    var progress by remember { mutableFloatStateOf(0.3f) }
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        LinearProgressIndicator(
-            progress = { progress },
-            modifier = Modifier.fillMaxWidth()
-        )
-        LinearProgressIndicator(
-            modifier = Modifier.fillMaxWidth()
-        )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CircularProgressIndicator(progress = { progress })
-            CircularProgressIndicator()
-        }
-
-        Button(onClick = { progress = if (progress >= 1f) 0f else progress + 0.1f }) {
-            Text("Update Progress")
-        }
-    }
-}
-
-@Composable
-fun RadioButtonExample() {
-    val options = listOf("Option 1", "Option 2", "Option 3")
-    var selectedOption by remember { mutableStateOf(options[0]) }
-
-    Column {
-        options.forEach { option ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(16.dp)
             ) {
-                RadioButton(
-                    selected = selectedOption == option,
-                    onClick = { selectedOption = option }
+                Text(
+                    "📊 Col 1:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color(0xFF2D3748)
                 )
-                Text(option)
-            }
-        }
-    }
-}
-
-@Composable
-fun SliderExample() {
-    var sliderValue by remember { mutableFloatStateOf(50f) }
-    Column {
-        Text("Value: ${sliderValue.toInt()}")
-        Slider(
-            value = sliderValue,
-            onValueChange = { sliderValue = it },
-            valueRange = 0f..100f,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-fun SpacerExample() {
-    Column {
-        Text("Before Spacer")
-        Spacer(modifier = Modifier.height(24.dp))
-        Text("After Spacer (24.dp)")
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("After smaller Spacer (8.dp)")
-    }
-}
-
-@Composable
-fun SwitchExample() {
-    var checked by remember { mutableStateOf(false) }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Switch(
-            checked = checked,
-            onCheckedChange = { checked = it }
-        )
-        Text("Switch is ${if (checked) "ON" else "OFF"}")
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBarExample() {
-    TopAppBar(
-        title = { Text("TopAppBar") },
-        navigationIcon = {
-            IconButton(onClick = { }) {
-                Icon(Icons.Default.Menu, contentDescription = "Menu")
-            }
-        },
-        actions = {
-            IconButton(onClick = { }) {
-                Icon(Icons.Default.Search, contentDescription = "Search")
-            }
-            IconButton(onClick = { }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "More")
-            }
-        }
-    )
-}
-
-@Composable
-fun BottomNavigationExample() {
-    var selectedItem by remember { mutableIntStateOf(0) }
-    val items = listOf("Home", "Search", "Profile")
-    val icons = listOf(Icons.Default.Home, Icons.Default.Search, Icons.Default.Person)
-
-    NavigationBar {
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                icon = { Icon(icons[index], contentDescription = item) },
-                label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index }
-            )
-        }
-    }
-}
-
-@Composable
-fun DialogExample() {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Column {
-        Button(onClick = { showDialog = true }) {
-            Text("Show Dialog")
-        }
-
-        if (showDialog) {
-            Dialog(onDismissRequest = { showDialog = false }) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                repeat(3) { index ->
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFF667eea).copy(alpha = 0.7f + index * 0.1f)
+                        ),
+                        shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("Custom Dialog")
-                        Text("This is a custom dialog content")
-                        Button(
-                            onClick = { showDialog = false },
-                            modifier = Modifier.align(Alignment.End)
-                        ) {
-                            Text("Close")
-                        }
+                        Text(
+                            "A$index",
+                            modifier = Modifier.padding(8.dp),
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+        }
+
+        Card(
+            modifier = Modifier.weight(1f),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFFF7FAFC)
+            ),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    "📈 Col 2:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color(0xFF2D3748)
+                )
+                repeat(2) { index ->
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFF764ba2).copy(alpha = 0.7f + index * 0.1f)
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            "B$index",
+                            modifier = Modifier.padding(8.dp),
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                 }
             }
         }
     }
 }
-
-@Composable
-fun DividerExample() {
-    Column {
-        Text("Above Divider")
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-        Text("Below Divider")
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 8.dp),
-            thickness = 2.dp,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text("Below Thick Colored Divider")
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropDownMenuExample() {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("Select Option") }
-    val options = listOf("Option 1", "Option 2", "Option 3", "Option 4")
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it }
-    ) {
-        OutlinedTextField(
-            value = selectedText,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable)
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedText = option
-                        expanded = false
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun LazyVerticalGridExample() {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(6) { index ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (index % 2 == 0)
-                        MaterialTheme.colorScheme.primaryContainer
-                    else
-                        MaterialTheme.colorScheme.secondaryContainer
-                )
-            ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    Text("Grid Item $index")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun NavigationRailExample() {
-    var selectedItem by remember { mutableIntStateOf(0) }
-    val items = listOf("Home", "Search", "Settings")
-    val icons = listOf(Icons.Default.Home, Icons.Default.Search, Icons.Default.Settings)
-
-    Row {
-        NavigationRail {
-            items.forEachIndexed { index, item ->
-                NavigationRailItem(
-                    icon = { Icon(icons[index], contentDescription = item) },
-                    label = { Text(item) },
-                    selected = selectedItem == index,
-                    onClick = { selectedItem = index }
-                )
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("NavigationRail Content Area\nSelected: ${items[selectedItem]}")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun OutlinedTextFieldExample() {
-    var text by remember { mutableStateOf("") }
-    var text2 by remember { mutableStateOf("") }
-
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Label") },
-            placeholder = { Text("Placeholder") }
-        )
-
-        OutlinedTextField(
-            value = text2,
-            onValueChange = { text2 = it },
-            label = { Text("With Icon") },
-            leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
-            trailingIcon = { Icon(Icons.Default.Star, contentDescription = null) }
-        )
-    }
-}
-
-@Composable
-fun PagerExample() {
-    // Simulamos un Pager simple
-    var currentPage by remember { mutableIntStateOf(0) }
-    val pages = listOf("Page 1", "Page 2", "Page 3")
-
-    Column {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text(pages[currentPage], fontSize = 20.sp)
-            }
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = { if (currentPage > 0) currentPage-- },
-                enabled = currentPage > 0
-            ) {
-                Text("Previous")
-            }
-
-            Text("${currentPage + 1} / ${pages.size}")
-
-            Button(
-                onClick = { if (currentPage < pages.size - 1) currentPage++ },
-                enabled = currentPage < pages.size - 1
-            ) {
-                Text("Next")
-            }
-        }
-    }
-}
-
-@Composable
-fun SnackbarExample() {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Button(
-            onClick = {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Simple Snackbar")
-                }
-            }
-        ) {
-            Text("Show Snackbar")
-        }
-
-        Button(
-            onClick = {
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = "Snackbar with Action",
-                        actionLabel = "Action"
-                    )
-                }
-            }
-        ) {
-            Text("Show Snackbar with Action")
-        }
-
-        SnackbarHost(hostState = snackbarHostState)
-    }
-}
-
-@Composable
-fun TabRowExample() {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Tab 1", "Tab 2", "Tab 3")
-
-    Column {
-        TabRow(selectedTabIndex = selectedTabIndex) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = { selectedTabIndex = index },
-                    text = { Text(title) }
-                )
-            }
-        }
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .padding(top = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text("Content for ${tabs[selectedTabIndex]}")
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TooltipExample() {
-    // Material3 TooltipBox es experimental, simulamos con Card
-    var showTooltip by remember { mutableStateOf(false) }
-
-    Column {
-        Box {
-            Button(
-                onClick = { showTooltip = !showTooltip }
-            ) {
-                Text("Hover/Click for Tooltip")
-            }
-
-            if (showTooltip) {
-                Card(
-                    modifier = Modifier
-                        .offset(y = (-40).dp)
-                        .padding(8.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.inverseSurface)
-                ) {
-                    Text(
-                        "This is a tooltip!",
-                        modifier = Modifier.padding(8.dp),
-                        color = MaterialTheme.colorScheme.inverseOnSurface,
-                        fontSize = 12.sp
-                    )
-                }
-            }
-        }
-    }
-}
-
-/* ------------------ COMPONENTE PRINCIPAL SHOWCASE ------------------ */
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ComponentShowcase() {
-    Scaffold(
-        topBar = {
-            TopAppBarExample()
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
-                Text(
-                    "CONTENEDORES",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            item {
-                ComponentCard("LazyColumn") { LazyColumnExample() }
-            }
-            item {
-                ComponentCard("LazyRow") { LazyRowExample() }
-            }
-            item {
-                ComponentCard("Grid (LazyVerticalGrid)") { GridExample() }
-            }
-            item {
-                ComponentCard("ConstraintLayout") { ConstraintLayoutExample() }
-            }
-            item {
-                ComponentCard("Scaffold") { ScaffoldExample() }
-            }
-            item {
-                ComponentCard("Surface") { SurfaceExample() }
-            }
-            item {
-                ComponentCard("Chip") { ChipExample() }
-            }
-            item {
-                ComponentCard("BackdropScaffold") { BackdropScaffoldExample() }
-            }
-            item {
-                ComponentCard("FlowRow") { FlowRowExample() }
-            }
-            item {
-                ComponentCard("FlowColumn") { FlowColumnExample() }
-            }
-
-            item {
-                Text(
-                    "CONTROLES",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
-
-            item {
-                ComponentCard("AlertDialog") { AlertDialogExample() }
-            }
-            item {
-                ComponentCard("Card") { CardExample() }
-            }
-            item {
-                ComponentCard("Checkbox") { CheckboxExample() }
-            }
-            item {
-                ComponentCard("FloatingActionButton") { FloatingActionButtonExample() }
-            }
-            item {
-                ComponentCard("Icon") { IconExample() }
-            }
-            item {
-                ComponentCard("Image") { ImageExample() }
-            }
-            item {
-                ComponentCard("ProgressBar") { ProgressBarExample() }
-            }
-            item {
-                ComponentCard("RadioButton") { RadioButtonExample() }
-            }
-            item {
-                ComponentCard("Slider") { SliderExample() }
-            }
-            item {
-                ComponentCard("Spacer") { SpacerExample() }
-            }
-            item {
-                ComponentCard("Switch") { SwitchExample() }
-            }
-            item {
-                ComponentCard("TopAppBar") { TopAppBarExample() }
-            }
-            item {
-                ComponentCard("BottomNavigation") { BottomNavigationExample() }
-            }
-            item {
-                ComponentCard("Dialog") { DialogExample() }
-            }
-            item {
-                ComponentCard("Divider") { DividerExample() }
-            }
-            item {
-                ComponentCard("DropDownMenu") { DropDownMenuExample() }
-            }
-            item {
-                ComponentCard("LazyVerticalGrid") { LazyVerticalGridExample() }
-            }
-            item {
-                ComponentCard("NavigationRail") { NavigationRailExample() }
-            }
-            item {
-                ComponentCard("OutlinedTextField") { OutlinedTextFieldExample() }
-            }
-            item {
-                ComponentCard("Pager") { PagerExample() }
-            }
-            item {
-                ComponentCard("Snackbar") { SnackbarExample() }
-            }
-            item {
-                ComponentCard("TabRow") { TabRowExample() }
-            }
-            item {
-                ComponentCard("Tooltip") { TooltipExample() }
-            }
-        }
-    }
-}
-
-@Composable
-fun ComponentCard(
-    title: String,
-    content: @Composable () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                text = title,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            content()
-        }
-    }
-}
-
-/* ------------------ PREVIEWS ------------------ */
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewComponentShowcase() {
+fun ComponentShowcasePreview() {
     MaterialTheme {
         ComponentShowcase()
     }
