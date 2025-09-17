@@ -903,7 +903,7 @@ fun TabRowExample() {
                     indicator = { tabPositions ->
                         Box(
                             modifier = Modifier
-                                 .height(4.dp)
+                                .height(4.dp)
                                 .padding(horizontal = 16.dp)
                                 .background(
                                     tabColors[selectedTabIndex],
@@ -1836,7 +1836,7 @@ fun ImageExample() {
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+                ) { 
                     Text(
                         "Imagen 2",
                         color = Color.White,
